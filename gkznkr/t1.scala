@@ -6,6 +6,7 @@ val cal = Calendar.getInstance
 cal.add(Calendar.DATE, -1) 
 val time: Date = cal.getTime 
 val daynow: String = new SimpleDateFormat("yyyyMMdd").format(time) 
+val ptmon: String = new SimpleDateFormat("yyyyMM").format(time) 
 
 hiveContext.sql(s"insert overwrite table gkznkr.ods_infor_day_t select * from gkznkr.ods_infor_day where ptday=${daynow}")
 hiveContext.sql(s"insert overwrite table gkznkr.serv_bill_day_t select * from gkznkr.serv_bill_day where ptday=${daynow}")
@@ -25,4 +26,9 @@ hiveContext.sql(s"insert overwrite table gkznkr.pon_ods_serv_order_day partition
 hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_t1 select ptday,month,week,local_name,area_name,olt_ip,olt_name,site_name,olt_type,olt_pon_type,pon_id,ponfree,type,speed,out,in,outper,inper,out_last,in_last,usrnum,usrnum_last,sn_code,case when inv_amt='null' then '-1' else inv_amt/100 end inv_amt,case when rate='null' then '-1' else rate end rate,flag_zq,flag_free from gkznkr.pon_ods_serv_order_day a where a.ptday=${daynow} and sn_code<>'null' ")
 
 hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_day partition (ptday=${daynow}) select month,week,local_name,area_name,olt_ip,olt_name,site_name,olt_type,olt_pon_type,pon_id,ponfree,type,speed,out,in,outper,inper,out_last,in_last,usrnum,usrnum_last,arpu,num_200m,num_500m,num_zq,flag_free from gkznkr.pon_split_infor_t4")
+
+hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_week_t1 select * from gkznkr.pon_split_infor_day where month = ${ptmon}")
+
+
+hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_week partition (ptmon=${ptmon}) select week,local_name,area_name,olt_ip,olt_name,site_name,olt_type,olt_pon_type,pon_id,ponfree,type,speed,flag_free,out_avg,in_avg,outper_avg,inper_avg,out_add,in_add,out_incease,in_incease,usr_avg,usr_add,arpu_avg,200m_avg,500m_avg,zq_avg,times,lista,listb,listc,listd,level,advise,'null','null','null','null','null' from gkznkr.pon_split_infor_week_t6")
 
