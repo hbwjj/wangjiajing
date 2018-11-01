@@ -30,7 +30,7 @@ hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_day partition (p
 
 hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_week_t1 select * from gkznkr.pon_split_infor_day where month = ${ptmon}")
 
-veContext.sql(s"insert overwrite table gkznkr.pon_split_infor_week partition (ptmon=${ptmon}) select week,local_id,b.sg,a.area_id,olt_ip,olt_name,site_name,olt_type,olt_pon_type,pon_id,ponfree,type,speed,flag_free,out_avg,in_avg,outper_avg,inper_avg,out_add,in_add,out_incease,in_incease,usr_avg,usr_add,arpu_avg,200m_avg,500m_avg,zq_avg,times,lista,listb,listc,listd,level,advise,reserve4,reserve5,reserve6 from gkznkr.pon_split_infor_week_t8 a left join gkznkr.area_sg_t b on a.area_id=b.area")
+hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_week partition (ptmon=${ptmon}) select week,local_id,b.sg,a.area_id,olt_ip,olt_name,site_name,olt_type,olt_pon_type,pon_id,ponfree,type,speed,flag_free,out_avg,in_avg,outper_avg,inper_avg,out_add,in_add,out_incease,in_incease,usr_avg,usr_add,arpu_avg,200m_avg,500m_avg,zq_avg,times,lista,listb,listc,listd,level,advise,reserve4,reserve5,reserve6 from gkznkr.pon_split_infor_week_t8 a left join gkznkr.area_sg_t b on a.area_id=b.area")
 
 
 for (x <- citylist)  
