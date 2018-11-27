@@ -31,16 +31,3 @@ hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_day partition (p
 hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_week_t1 select * from gkznkr.pon_split_infor_day where month = ${ptmon}")
 
 hiveContext.sql(s"insert overwrite table gkznkr.pon_split_infor_week partition (ptmon=${ptmon}) select week,local_id,b.sg,a.area_id,olt_ip,olt_name,site_name,olt_type,olt_pon_type,pon_id,ponfree,type,speed,flag_free,out_avg,in_avg,outper_avg,inper_avg,out_add,in_add,out_incease,in_incease,usr_avg,usr_add,arpu_avg,200m_avg,500m_avg,zq_avg,times,lista,listb,listc,listd,level,advise,reserve4,reserve5,reserve6 from gkznkr.pon_split_infor_week_t8 a left join gkznkr.area_sg_t b on a.area_id=b.area")
-
-
-for (x <- citylist)  
-hiveContext.sql(s"insert overwrite table huijiucuo.rm_infor_day partition (ptday=${daynow},city=${x}) select distinct prod_id,case when instr(acc_nbr2,'@')>0 then Lower(substr(acc_nbr2,1,instr(acc_nbr2,'@')-1)) when instr(acc_nbr2,'@')=0 then Lower(acc_nbr2) end acc_nbr,area_id,area_name,local_id,local_name,managed_port_id,managed_port_code,managed_device_id,managed_device_code,sn_code,pvlan,cvlan,obd_port_id,obd_port_code,obd_device_id,obd_device_code,up_obd_id,up_obd_code,up_obd_name,olt_pon_id,olt_pon_code,pon_id,olt_id,olt_code,olt_name,olt_ip,sw_downport,sw_device_name,sw_id,sw_upport,bas_port,bas_ip,bas_name,obd_device_name,up_obd_port_id,up_obd_add,m_opath_code,m_opath_name,z_opath_code,z_opath_name,m_opath_route,z_opath_route from gkznkr.ods_infor_day where olt_ip<>'NULL' and prod_type='KD' and acc_types='FTTH' and ptday=${daynow} and city=${x}")
-
-hiveContext.sql(s"insert overwrite table huijiucuo.rm_infor_day_t select * from huijiucuo.rm_infor_day where ptday=${daynow}")
-
-hiveContext.sql(s"insert overwrite table huijiucuo.ta_infor_day_t select * from huijiucuo.ta_infor_day where ptday=${daynow}")
-
-for (x <- citylist) 
-hiveContext.sql(s"insert overwrite table huijiucuo.rm_ta_infor_day partition (ptday=${daynow},city=${x}) select distinct serv_id,acc_nbr,area_id,area_name,local_id,local_name,managed_port_id,managed_port_code,managed_device_id,managed_device_code,sn_code,pvlan,cvlan,obd_port_id,obd_port_code,obd_device_id,obd_device_code,up_obd_id,up_obd_code,up_obd_name,olt_pon_id,olt_pon_code,pon_id,olt_id,olt_code,olt_name,olt_ip,sw_downport,sw_device_name,sw_id,sw_upport,bas_port,bas_ip,bas_name,obd_device_name,up_obd_port_id,up_obd_add,m_opath_code,m_opath_name,z_opath_code,z_opath_name,m_opath_route,z_opath_route,area,oltname,oltip,oltslport,switchname,switchip,switchxlportname1,switchxlportname2,switchslportname1,switchslportname2,basname,basip,basxlportname1,basxlportname2,eponcircuitname,fibersection1,relaycircuitname,fibersection2,transcircuitname from huijiucuo.rm_infor_day_t a left join huijiucuo.ta_infor_day_t b on a.olt_ip = b.oltip where a.city = ${x}")
-
-
