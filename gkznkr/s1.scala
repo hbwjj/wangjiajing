@@ -22,7 +22,11 @@ hiveContext.sql(s"insert overwrite table huijiucuo.rm_ta_infor_day_t select * fr
 
 hiveContext.sql(s"insert overwrite table huijiucuo.ljzys2_t select * from huijiucuo.ljzys2 where time=${daynow}")
 
-hiveContext.sql(s"insert overwrite table huijiucuo.wls_t select distinct a.acc,a.basip,a.ptype,a.port,a.pvlan,a.cvlan,a.city,a.bname,a.suport,a.swip,a.swname,a.sdport,a.ouport,a.oltip,a.oname,a.time,b.area_id,b.olt_ip,b.olt_name,b.oltslport,b.olt_pon_id,b.pvlan,b.cvlan,b.switchname,b.switchip,b.switchslportname2,b.switchxlportname2,b.basname,b.basip,b.basxlportname2 from huijiucuo.ljzys2_t a left join huijiucuo.rm_ta_infor_day_t b  on a.acc = b.acc_nbr and a.city=b.city")
+hiveContext.sql("insert overwrite table huijiucuo.crm_t select distinct serv_id,case when instr(acc_nbr,'@')>0 then Lower(substr(acc_nbr,1,instr(acc_nbr,'@')-1)) when instr(acc_nbr,'@')=0 then Lower(acc_nbr) end acc_nbr,latn_id from gkznkr.serv_bill_day_t")
+
+hiveContext.sql("insert overwrite table huijiucuo.ljzys2_crm_t select distinct a.acc,a.basip,a.ptype,a.port,a.pvlan,a.cvlan,a.city,a.bname,a.suport,a.swip,a.swname,a.sdport,a.ouport,a.oltip,a.oname,a.time,b.serv_id,b.acc_nbr crm_acc,b.latn_id from huijiucuo.ljzys2_t a left join huijiucuo.crm_t b on a.acc=b.acc_nbr and a.city=b.latn_id")
+
+hiveContext.sql(s"insert overwrite table huijiucuo.wls_t select distinct a.acc,a.basip,a.ptype,a.port,a.pvlan,a.cvlan,a.city,a.bname,a.suport,a.swip,a.swname,a.sdport,a.ouport,a.oltip,a.oname,a.time,b.area_id,b.olt_ip,b.olt_name,b.oltslport,b.olt_pon_id,b.pvlan,b.cvlan,b.switchname,b.switchip,b.switchslportname2,b.switchxlportname2,b.basname,b.basip,b.basxlportname2,a.serv_id from huijiucuo.ljzys2_crm_t a left join huijiucuo.rm_ta_infor_day_t b on a.acc = b.acc_nbr and a.city=b.city")
 
 
 
